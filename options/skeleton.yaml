@@ -1,0 +1,33 @@
+precision: highest # str: must
+seed: 0 # int: must
+model:
+  type: null # str: must
+data:
+  train_dataset: # or\and 'dataset', 'val_dataset', 'test_dataset'
+    type: null # str: must
+    path: null # str: must
+    transform: null # str: OPTIONAL
+  train_dataloader: # or\and 'dataloader', 'val_dataloader', 'test_dataloader'
+    batch_size: null # int: must
+    num_workers: null # int: must
+    pin_memory: null # str: must
+    shuffle: null # str: must
+trainer:
+  max_epochs: null # int: must (-1 for infinite)
+  accelerator: null # str: must
+  devices: null # int: must
+  num_workers: null # int: must
+  patience: null # int: must
+  log_every_n_steps: null # int: must
+  callbacks:
+    checkpoints:
+      monitor: null # str: must
+      mode: null # str: must
+logger:
+  enabled: true # str: must
+  username: X # str: must
+  project_name: null # str: must
+  run_name: null # str: must
+  alias: null # str: must
+  log_model: all # str: must
+  

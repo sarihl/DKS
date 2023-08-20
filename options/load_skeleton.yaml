@@ -1,0 +1,9 @@
+precision: highest # str: must
+seed: 0 # int: must
+logger:
+  enabled: true # str: must
+  username: X # str: must
+  project_name: X # str: must
+  run_name: null # str: must
+  alias: null # str: must
+  log_model: all # str: must
