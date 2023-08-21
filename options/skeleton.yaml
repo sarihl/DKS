@@ -5,8 +5,7 @@ model:
 data:
   train_dataset: # or\and 'dataset', 'val_dataset', 'test_dataset'
     type: null # str: must
-    path: null # str: must
-    transform: null # str: OPTIONAL
+    # other args
   train_dataloader: # or\and 'dataloader', 'val_dataloader', 'test_dataloader'
     batch_size: null # int: must
     num_workers: null # int: must
@@ -16,11 +15,10 @@ trainer:
   max_epochs: null # int: must (-1 for infinite)
   accelerator: null # str: must
   devices: null # int: must
-  num_workers: null # int: must
   patience: null # int: must
   log_every_n_steps: null # int: must
   callbacks:
-    checkpoints:
+    ModelCheckpoint:
       monitor: null # str: must
       mode: null # str: must
 logger:

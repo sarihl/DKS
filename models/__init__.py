@@ -31,7 +31,8 @@ def build_model(opt):
     returns:
         model (BaseModel): model built by opt.
     """
-    model = MODEL_REGISTRY.get(opt['type'])(opt)
+    model_type = opt.pop('type')
+    model = MODEL_REGISTRY.get(model_type)(opt)
     print(f'Model [{model.__class__.__name__}] is created.', file=sys.stderr)  # logging
 
     return model
@@ -62,12 +63,13 @@ def init_model_and_cfg(cfg: DictConfig, resume: bool) -> (pl.LightningModule, st
 
         # get the config from the run
         run = api.run(cfg.logger.user_name + '/' + cfg.logger.project_name + '/' + cfg.logger.run_name)
-        config = {key: ast.literal_eval(run.config['_content'][key]) for key, val in run.config['_content'].items()}
-        config = DictConfig(config)
+        cfg = {key: ast.literal_eval(run.config['_content'][key]) for key, val in run.config['_content'].items()}
+        cfg = DictConfig(cfg)
 
         # build the model
         model = MODEL_REGISTRY.get(cfg['model']['type']).load_from_checkpoint(chkpt_path)
         print(f'Model [{model.__class__.__name__}] is created.', file=sys.stderr)  # logging
-        return model, chkpt_path, config
+        return model, chkpt_path, cfg
     else:
+        cfg = DictConfig(dict(cfg))  # turns off the read-only flag (struct mode)
         return build_model(cfg['model']), None, cfg

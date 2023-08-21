@@ -14,7 +14,7 @@ data_folder = osp.dirname(osp.abspath(__file__))
 datamodule_filenames = [osp.splitext(osp.basename(v))[0] for v in scandir(data_folder, recursive=True) if
                         v.endswith('_datamodule.py')]
 # import all the datamodule modules
-_datamodule_modules = [importlib.import_module(f'datamodule.{file_name}') for file_name in datamodule_filenames]
+_datamodule_modules = [importlib.import_module(f'datamodules.{file_name}') for file_name in datamodule_filenames]
 
 
 def build_datamodule(datamodule_opt):
@@ -27,7 +27,8 @@ def build_datamodule(datamodule_opt):
         datamodule (pytorch_lightning.DataModule): datamodule built by opt.
     """
     datamodule_opt = deepcopy(datamodule_opt)
+    datamodule_type = datamodule_opt.pop('type')
     # build datamodule
-    datamodule = DATAMODULE_REGISTRY.get(datamodule_opt['type'])(datamodule_opt)
+    datamodule = DATAMODULE_REGISTRY.get(datamodule_type)(datamodule_opt)
     print(f'datamodule [{datamodule.__class__.__name__}] is built.', file=sys.stderr)  # logging
     return datamodule

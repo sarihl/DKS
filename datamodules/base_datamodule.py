@@ -72,10 +72,10 @@ class BaseDataModule(LightningDataModule):
                          'predict'], f'Invalid stage: {usage}, should be train, val, test, or predict'
         assert component in ['dataset', 'dataloader'], f'Invalid component: {component} should be dataset or dataloader'
 
-        if usage + '_' + component in self._cfg.data:
-            return self._cfg.data[usage + '_' + component], False
-        elif component in self._cfg.data:
-            return self._cfg.data[component], True
+        if usage + '_' + component in self._cfg:
+            return self._cfg[usage + '_' + component], False
+        elif component in self._cfg:
+            return self._cfg[component], True
 
     def _get_dataloader(self, usage: str) -> Optional[DataLoader]:
         """

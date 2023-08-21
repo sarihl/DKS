@@ -48,9 +48,10 @@ def scandir(dir_path: str, suffix: Optional[str] = None, recursive: bool = False
 
 
 def print_cfg(cfg: DictConfig, file=sys.stderr):
-    print('### Printing Configuration ###', file=file)
+    hash_str = '#' * 10
+    print(hash_str + ' Printing Configuration ' + hash_str, file=file)
     print(OmegaConf.to_yaml(cfg), file=file)
-    print('### Configuration over ###', file=file)
+    print(hash_str + ' Configuration over ' + hash_str, file=file)
 
 
 def init_callbacks(cfg: Optional[DictConfig]):

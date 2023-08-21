@@ -1,0 +1,57 @@
+precision: medium # str: must
+seed: 0 # int: must
+model:
+  type: TestModel # str: must
+  net_1:
+    type: TestNet
+    in_dim: 3
+    out_dim: 3
+  loss_1:
+    type: TestLoss
+    reduction: mean
+    coef: 1
+    log: true
+    logger_params:
+      name: first_test_loss
+data:
+  type: BaseDataModule
+  train_dataset: # or\and 'dataset', 'val_dataset', 'test_dataset'
+    type: TestDataset # str: must
+    mean: 0
+    std: 1
+    size: 10
+    dim: 3
+  train_dataloader: # or\and 'dataloader', 'val_dataloader', 'test_dataloader'
+    batch_size: 6 # int: must
+    num_workers: 2 # int: must
+    pin_memory: false # str: must
+    shuffle: true # str: must
+  dataset:
+    type: TestDataset # str: must
+    mean: 0
+    std: 1
+    size: 5
+    dim: 3
+  val_dataloader:
+    batch_size: 4
+    num_workers: 2
+    pin_memory: false
+    shuffle: false
+trainer:
+  max_epochs: 10 # int: must (-1 for infinite)
+  accelerator: auto # str: must
+  devices: 1 # int: must
+  patience: null # int: must
+  log_every_n_steps: null # int: must
+  callbacks:
+    ModelCheckpoint:
+      monitor: val_first_test_loss # str: must
+      mode: min # str: must
+logger:
+  enabled: false # str: must
+  username: X # str: must
+  project_name: null # str: must
+  run_name: null # str: must
+  alias: null # str: must
+  log_model: all # str: must
+  

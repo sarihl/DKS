@@ -11,7 +11,7 @@ from models import init_model_and_cfg
 from datamodules import build_datamodule
 
 
-@hydra.main(version_base=None, config_path='options', config_name='base')
+@hydra.main(version_base=None, config_path='options', config_name='basic_test')
 def main(cfg: DictConfig):
     # printing configuration
     print_cfg(cfg)
@@ -20,12 +20,12 @@ def main(cfg: DictConfig):
     pl.seed_everything(cfg.seed)
     torch.set_float32_matmul_precision(cfg.precision)
 
-    # initializing logger
-    resume = cfg.logger.run_name is not None
-    logger = None
+    # initializing logger (if needed)
+    resume, logger = False, None
     if cfg.logger.enabled:
         wandb.login()
         # if the run should be resumed, we need to pass the resume flag to the logger
+        resume = cfg.logger.run_name is not None
         kw = {'resume': 'must'} if resume else {}
         # initializing logger
         logger = WandbLogger(project=cfg.logger.project_name, log_model=cfg.logger.log_model, id=cfg.logger.run_name,
@@ -44,7 +44,7 @@ def main(cfg: DictConfig):
 
     # initializing trainer
     trainer = pl.Trainer(devices=cfg.trainer.devices, accelerator=cfg.trainer.accelerator,
-                         log_every_n_steps=cfg.trainier.log_every_n_steps, max_epochs=cfg.trainer.max_epochs,
+                         log_every_n_steps=cfg.trainer.log_every_n_steps, max_epochs=cfg.trainer.max_epochs,
                          callbacks=callbacks, logger=logger)
 
     # training
