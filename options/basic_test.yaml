@@ -11,8 +11,11 @@ model:
     reduction: mean
     coef: 1
     log: true
-    logger_params:
+    logger_params: # passed to the pl module's self.log function
       name: first_test_loss
+  optimizer:
+    type: Adam
+
 data:
   type: BaseDataModule
   train_dataset: # or\and 'dataset', 'val_dataset', 'test_dataset'

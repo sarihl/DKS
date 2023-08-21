@@ -69,3 +69,19 @@ def init_callbacks(cfg: Optional[DictConfig]):
         callback_list.append(callback(**params))
 
     return callback_list
+
+
+def build_optimizer(cfg: DictConfig, params):
+    optimizer_type = cfg.pop('type')
+    module = importlib.import_module('torch.optim')
+    optimizer = getattr(module, optimizer_type)(params, **cfg)
+    print(f'Optimizer [{optimizer.__class__.__name__}] is created.', file=sys.stderr)
+    return optimizer
+
+
+def build_scheduler(cfg: DictConfig, optimizer):
+    scheduler_type = cfg.pop('type')
+    module = importlib.import_module('torch.optim.lr_scheduler')
+    scheduler = getattr(module, scheduler_type)(optimizer, **cfg)
+    print(f'Scheduler [{scheduler.__class__.__name__}] is created.', file=sys.stderr)
+    return scheduler

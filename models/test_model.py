@@ -5,12 +5,14 @@ from networks import build_network
 from losses import build_loss
 import torch
 from utils.registry import MODEL_REGISTRY
+from utils.misc import build_optimizer, build_scheduler
 
 
 @MODEL_REGISTRY.register()
 class TestModel(pl.LightningModule):
     def __init__(self, cfg: Union[Dict, DictConfig]):
         super().__init__()
+        self.save_hyperparameters()
         self.cfg = cfg
         self.model_1 = build_network(cfg.net_1)
         self.loss = build_loss(cfg.loss_1)
@@ -31,5 +33,8 @@ class TestModel(pl.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters())
+        optimizer = build_optimizer(self.cfg.optimizer, self.parameters())
+        if 'scheduler' in self.cfg:
+            scheduler = build_scheduler(self.cfg.scheduler, optimizer)
+            return [optimizer], [scheduler]
         return optimizer
